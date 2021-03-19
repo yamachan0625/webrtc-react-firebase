@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import Button from '@material-ui/core/Button';
 import CssBaseline from '@material-ui/core/CssBaseline';
 import TextField from '@material-ui/core/TextField';
@@ -41,9 +41,27 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-export default function SignIn() {
+export default function SignIn({ localPeerName, setLocalPeerName }) {
   const label = 'あなたの名前';
   const classes = useStyles();
+  const [disabled, setDisabled] = useState(true);
+  const [name, setName] = useState('');
+  const [isComposed, setIsComposed] = useState(false);
+
+  useEffect(() => {
+    const disabled = name === '';
+    setDisabled(disabled);
+  }, [name]);
+
+  const initializeLocalPeer = useCallback(
+    (e) => {
+      setLocalPeerName(name);
+      e.preventDefault();
+    },
+    [name]
+  );
+
+  if (localPeerName !== '') return <></>;
 
   return (
     <Container component="main" maxWidth="xs">
@@ -61,13 +79,26 @@ export default function SignIn() {
             label={label}
             name="name"
             autoFocus
+            onChange={(e) => {
+              setName(e.target.value);
+            }}
+            onCompositionEnd={() => setIsComposed(false)}
+            onCompositionStart={() => setIsComposed(true)}
+            value={name}
+            onKeyDown={(e) => {
+              if (isComposed) return;
+              if (e.target.value === '') return;
+              if (e.key === 'Enter') initializeLocalPeer(e);
+            }}
           />
           <Button
             type="submit"
             fullWidth
+            onClick={(e) => initializeLocalPeer(e)}
             variant="contained"
             color="primary"
             className={classes.submit}
+            disabled={disabled}
           >
             決定
           </Button>
