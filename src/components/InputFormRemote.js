@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import Button from '@material-ui/core/Button';
 import CssBaseline from '@material-ui/core/CssBaseline';
 import TextField from '@material-ui/core/TextField';
@@ -41,9 +41,32 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-export default function SignIn({ remotePeerName, setRemotePeerName }) {
+export default function SignIn({
+  localPeerName,
+  remotePeerName,
+  setRemotePeerName,
+}) {
   const label = '相手の名前';
   const classes = useStyles();
+  const [disabled, setDisabled] = useState(true);
+  const [name, setName] = useState('');
+  const [isComposed, setIsComposed] = useState(false);
+
+  useEffect(() => {
+    const disabled = name === '';
+    setDisabled(disabled);
+  }, [name]);
+
+  const initializeRemotePeer = useCallback(
+    (e) => {
+      setRemotePeerName(name);
+      e.preventDefault();
+    },
+    [name]
+  );
+
+  if (localPeerName === '') return <></>;
+  if (remotePeerName !== '') return <></>;
 
   return (
     <Container component="main" maxWidth="xs">
@@ -61,10 +84,23 @@ export default function SignIn({ remotePeerName, setRemotePeerName }) {
             label={label}
             name="name"
             autoFocus
+            onChange={(e) => {
+              setName(e.target.value);
+            }}
+            onCompositionEnd={() => setIsComposed(false)}
+            onCompositionStart={() => setIsComposed(true)}
+            value={name}
+            onKeyDown={(e) => {
+              if (isComposed) return;
+              if (e.target.value === '') return;
+              if (e.key === 'Enter') initializeRemotePeer(e);
+            }}
           />
           <Button
             type="submit"
             fullWidth
+            disabled={disabled}
+            onClick={(e) => initializeRemotePeer(e)}
             variant="contained"
             color="primary"
             className={classes.submit}
