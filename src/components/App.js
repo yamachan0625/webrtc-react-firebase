@@ -3,8 +3,6 @@ import InputFormLocal from './InputFormLocal';
 import InputFormRemote from './InputFormRemote';
 import VideoArea from './VideoArea';
 
-getMedia();
-
 const App = () => {
   const [localPeerName, setLocalPeerName] = useState('');
   const [remotePeerName, setRemotePeerName] = useState('');
