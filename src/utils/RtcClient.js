@@ -1,5 +1,5 @@
 export default class RtcClient {
-  constructor(localPeerName = '', remotePeerName = '') {
+  constructor(setRtcClient) {
     const config = {
       iceServers: [
         {
@@ -8,8 +8,13 @@ export default class RtcClient {
       ],
     };
 
-    this.rtcPeerConnection = new RTCPeerConnection(config);
-    this.localPeerName = localPeerName;
-    this.remotePeerName = remotePeerName;
+    this.ortcPeerConnection = new RTCPeerConnection(config);
+    this.localPeerName = '';
+    this.remotePeerName = '';
+    this._setRtcClient = setRtcClient;
+  }
+
+  setRtcClient() {
+    this._setRtcClient(this);
   }
 }
