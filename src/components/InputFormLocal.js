@@ -54,8 +54,8 @@ export default function SignIn({ rtcClient }) {
   }, [name]);
 
   const initializeLocalPeer = useCallback(
-    (e) => {
-      rtcClient.startListening(name);
+    async (e) => {
+      await rtcClient.startListening(name);
       e.preventDefault();
     },
     [name, rtcClient]
@@ -85,16 +85,16 @@ export default function SignIn({ rtcClient }) {
             onCompositionEnd={() => setIsComposed(false)}
             onCompositionStart={() => setIsComposed(true)}
             value={name}
-            onKeyDown={(e) => {
+            onKeyDown={async (e) => {
               if (isComposed) return;
               if (e.target.value === '') return;
-              if (e.key === 'Enter') initializeLocalPeer(e);
+              if (e.key === 'Enter') await initializeLocalPeer(e);
             }}
           />
           <Button
             type="submit"
             fullWidth
-            onClick={(e) => initializeLocalPeer(e)}
+            onClick={async (e) => await initializeLocalPeer(e)}
             variant="contained"
             color="primary"
             className={classes.submit}
