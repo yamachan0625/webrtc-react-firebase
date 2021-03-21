@@ -22,7 +22,12 @@ const VideoLocal = ({ rtcClient }) => {
   }, [currentVideoRef]);
 
   return (
-    <Video isLocal={true} name={rtcClient.localPeerName} videoRef={videoRef} />
+    <Video
+      isLocal={true}
+      name={rtcClient.localPeerName}
+      rtcClient={rtcClient}
+      videoRef={videoRef}
+    />
   );
 };
 
