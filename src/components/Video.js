@@ -16,8 +16,8 @@ const Video = ({ isLocal, name, rtcClient, videoRef }) => {
   const volumeButtonRef = useRef(null);
   const dimensionsVolumeButton = useDimensions(volumeButtonRef);
 
-  if (videoRef.current !== null)
-    console.log({ isLocal, srcObject: videoRef.current.srcObject });
+  // if (videoRef.current !== null)
+  //   console.log({ isLocal, srcObject: videoRef.current.srcObject });
 
   return (
     <Card ref={refCard}>
@@ -45,7 +45,7 @@ const Video = ({ isLocal, name, rtcClient, videoRef }) => {
         {!muted && videoRef.current && videoRef.current.srcObject && (
           <AudioAnalyser
             audio={videoRef.current.srcObject}
-            width={dimensionsCard.width - dimensionsVolumeButton.width - 40}
+            width={dimensionsCard.width - dimensionsVolumeButton.width}
           />
         )}
       </CardActions>

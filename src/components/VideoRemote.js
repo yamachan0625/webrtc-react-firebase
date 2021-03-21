@@ -5,6 +5,9 @@ import Video from './Video';
 const VideoRemote = ({ rtcClient }) => {
   const videoRef = rtcClient.remoteVideoRef;
 
+  if (rtcClient.remotePeerName === '' || rtcClient.localPeerName === '')
+    return <></>;
+
   return (
     <Video
       isLocal={false}
